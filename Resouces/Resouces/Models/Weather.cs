@@ -5,7 +5,7 @@ using System.Text;
 namespace Resouces.Models
 {
 
-    public class Rootobject
+    public class WeatherInfo
     {
         public Coord coord { get; set; }
         public Weather[] weather { get; set; }
@@ -23,18 +23,18 @@ namespace Resouces.Models
 
     public class Coord
     {
-        public int lon { get; set; }
-        public int lat { get; set; }
+        public float lon { get; set; }
+        public float lat { get; set; }
     }
 
     public class Main
     {
-        public float temp { get; set; }             // Температура
-        public float feels_like { get; set; }   
-        public float temp_min { get; set; }         // Минимальная за сегодня
-        public float temp_max { get; set; }         // Максимальная 
-        public int pressure { get; set; }           // Давление
-        public int humidity { get; set; }           // Влажность воздуха
+        public float temp { get; set; }
+        public float feels_like { get; set; }
+        public float temp_min { get; set; }
+        public float temp_max { get; set; }
+        public float pressure { get; set; }
+        public int humidity { get; set; }
     }
 
     public class Wind
@@ -60,10 +60,9 @@ namespace Resouces.Models
 
     public class Weather
     {
-        public int id { get; set; }                 
+        public int id { get; set; }
         public string main { get; set; }
         public string description { get; set; }
         public string icon { get; set; }
     }
-
 }

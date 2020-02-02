@@ -15,28 +15,41 @@ namespace Resouces.ModelViews
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public ICommand UpdateData;
+        public ICommand UpdateData { get; set; }
 
         public WeatherViewModel()
         {
             UpdateData = new Command(
                 execute: () =>
                 {
-                    Task<WeatherApiResponse> response = WeatherApi.Get();
+                    IsExecuting = true;
 
-                    WeatherApiResponse resp = response.Result;
+                    var req = WeatherApi.Get();
 
-                    if (resp.Successful)
+                    req.Wait();
+
+                    var response = req.Result;
+
+                    if (response.Successful)
                     {
-                        var WeatherInfo = JsonConvert.DeserializeObject<Weather>(resp.Content);
-                        var MainInfo = JsonConvert.DeserializeObject<Main>(resp.Content);
+                        var WeatherInfo = JsonConvert.DeserializeObject<WeatherInfo>(response.Content);
 
-                        WeatherName = WeatherInfo.main;
-                        Temperature = MainInfo.temp;
-                        MaxTemperature = MainInfo.temp_max;
-                        MinTemperature = MainInfo.temp_min;
+                        Console.WriteLine("asdasda");
 
+                        WeatherName = WeatherInfo.weather[0].main;
+
+                        Temperature = WeatherInfo.main.temp;
+
+                        MaxTemperature = WeatherInfo.main.temp_max;
+
+                        MinTemperature = WeatherInfo.main.temp_min;
+
+                        Pressure = WeatherInfo.main.pressure;
+
+                        Humidity = WeatherInfo.main.humidity;
                     }
+
+                    IsExecuting = false;
                 },
                 canExecute: () =>
                 {
@@ -47,7 +60,7 @@ namespace Resouces.ModelViews
                 });
 
             // initial execute
-            UpdateData.Execute(new object());
+            //UpdateData.Execute(new object());
         }
 
         public string WeatherName
@@ -55,7 +68,7 @@ namespace Resouces.ModelViews
             get { return _weatherType; }
             set
             {
-                SetValue(ref _weatherType, value); 
+                SetValue(ref _weatherType, value);
             }
         }
 
@@ -64,25 +77,25 @@ namespace Resouces.ModelViews
             get { return _temp; }
             set { SetValue(ref _temp, value); }
         }
-        
+
         public float MaxTemperature
         {
             get { return _maxTemp; }
             set { SetValue(ref _maxTemp, value); }
         }
-        
+
         public float MinTemperature
         {
             get { return _minTemp; }
             set { SetValue(ref _minTemp, value); }
         }
-        
-        public int Pressure
+
+        public float Pressure
         {
             get { return _pressure; }
             set { SetValue(ref _pressure, value); }
         }
-        
+
         public int Humidity
         {
             get { return _vlazhnost; }
@@ -91,7 +104,7 @@ namespace Resouces.ModelViews
 
         private bool SetValue<T>(ref T target, T value, [CallerMemberName] string propName = null)
         {
-            if (!object.Equals(target, value))
+            if (object.Equals(target, value))
                 return false;
 
             target = value;
@@ -109,7 +122,7 @@ namespace Resouces.ModelViews
         float _temp;
         float _minTemp;
         float _maxTemp;
-        int _pressure;
+        float _pressure;
         int _vlazhnost;
     }
 }

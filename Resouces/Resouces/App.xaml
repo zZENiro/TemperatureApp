@@ -5,18 +5,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              x:Class="Resouces.App">
-    
+
     <Application.Resources>
         <ResourceDictionary>
-            <Color x:Key="HeaderTextColor">#000000</Color>
-            <Color x:Key="OrdinaryTextColor">#0AKHDF</Color>
-
             <Style TargetType="Label">
-                <Setter Property="FontSize" Value="Large"/>
+                <Setter Property="HorizontalOptions" Value="CenterAndExpand"/>
+                <Setter Property="TextColor" Value="Aqua"/>
+                <Setter Property="Margin" Value="15"/>
             </Style>
-
-
-        </ResourceDictionary>
+        </ResourceDictionary> 
     </Application.Resources>
-    
+
 </Application>

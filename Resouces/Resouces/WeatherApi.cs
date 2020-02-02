@@ -13,18 +13,22 @@ namespace Resouces
     {
         public static async Task<WeatherApiResponse> Get(string authId = null)
         {
-            var location = await GetLocation();
+            var locationRequest = GetLocation();
+            locationRequest.Wait();
+            var location = locationRequest.Result;
 
             using (var client = new HttpClient())
             {
-                if (!string.IsNullOrEmpty(authId))
-                    client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Authorization", authId);
+                var requestMessage = client.GetAsync(($"https://samples.openweathermap.org/data/2.5/weather?lat={location.Latitude}&lon={location.Longitude}&appid=b6907d289e10d714a6e88b30761fae22"));
 
-                var request = await client.GetAsync(($"https://samples.openweathermap.org/data/2.5/weather?lat={location.Latitude}&lon={location.Longitude}&appid=b6907d289e10d714a6e88b30761fae22"));
-                if (request.IsSuccessStatusCode)
-                    return new WeatherApiResponse() { Content = await request.Content.ReadAsStringAsync() };
+                requestMessage.Wait();
+
+                var responseHttp = requestMessage.Result;
+
+                if (responseHttp.IsSuccessStatusCode)
+                    return new WeatherApiResponse() { Content = await responseHttp.Content.ReadAsStringAsync() };
                 else
-                    return new WeatherApiResponse() { ErrorMessage = request.ReasonPhrase };
+                    return new WeatherApiResponse() { ErrorMessage = responseHttp.ReasonPhrase };
             }
         } 
 

@@ -8,7 +8,15 @@
              x:Class="Resouces.MainPage">
 
     <ScrollView>
-        
+        <StackLayout>
+            <Button Command="{Binding UpdateData}"/>
+            <Label Text="{Binding WeatherName}"/>
+            <Label Text="{Binding Temperature}"/>
+            <Label Text="{Binding MaxTemperature}"/>
+            <Label Text="{Binding MinTemperature}"/>
+            <Label Text="{Binding Pressure}"/>
+            <Label Text="{Binding Humidity}"/>
+        </StackLayout>
     </ScrollView>
 
 </ContentPage>
